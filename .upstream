@@ -1,0 +1,9 @@
+statusline.sh  https://github.com/kcchien/claude-code-statusline  MIT
+  commit 877d24480ca9a37b8eefc0448a6a73a111989b6d  (2026-03-24)
+  Local changes marked "LOCAL PATCH". To update:
+    diff .upstream-statusline.sh.orig statusline.sh   # review local delta
+    curl -fsSL -o .upstream-statusline.sh.orig \
+      https://raw.githubusercontent.com/kcchien/claude-code-statusline/main/statusline.sh
+
+statusline.sh is redistributed under the MIT license in
+LICENSES/claude-code-statusline.MIT

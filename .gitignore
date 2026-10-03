@@ -1,0 +1,4 @@
+# machine-specific: absolute paths, local tool versions. Never commit.
+settings.machine.json
+*.bak
+.DS_Store
