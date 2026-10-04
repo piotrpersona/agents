@@ -2,3 +2,8 @@
 settings.machine.json
 *.bak
 .DS_Store
+
+# local tool state
+.claude/settings.local.json
+.claude/.headroom_wrap_settings.lock
+.serena/
