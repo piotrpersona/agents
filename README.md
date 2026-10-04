@@ -21,6 +21,7 @@ The installer needs `git` and `jq`. It clones to
 
 - symlinks `rules/*.md` into `~/.claude/rules/`
 - symlinks `hooks/*.sh` into `~/.claude/hooks/`
+- symlinks each `skills/<name>/` into `~/.claude/skills/`
 - symlinks `statusline.sh` to `~/.claude/statusline.sh`
 - generates `~/.claude/settings.json` (see below)
 
@@ -48,6 +49,8 @@ rules/                        auto-loaded by Claude Code in every project
   go-project-structure.md     hexagonal layout for Go services
 hooks/
   codegraph-init-check.sh     SessionStart: flag repos with no CodeGraph index
+skills/
+  intent-masking/             UUID tokens instead of intent text in MCP calls
 statusline.sh                 vendored, see .upstream (MIT)
 settings.shared.json          portable settings, tracked here
 settings.machine.example.json template for the machine-local overlay
@@ -89,6 +92,35 @@ make install   # regenerate settings.json
 make diff      # show drift between the live file and repo + overlay
 ```
 
+## Skills
+
+`skills/intent-masking/` keeps intent text out of MCP tool arguments. Before a
+`mcp__*` call with a free-text `intent`, `purpose`, `reason` or `justification`
+field, the skill checks the tool schema: if the field is not in `required` it is
+dropped, and if it is required `mask_intent.py` mints a UUIDv4 to send instead
+of the text.
+
+```sh
+mask_intent.py mask --tool <tool> --operation <label>  # mint, or reuse the label's token
+mask_intent.py check <value>                           # exit 1 on anything but a UUIDv4
+mask_intent.py trail [--operation L] [--all]           # what this session masked
+mask_intent.py resolve <intent_id>                     # one record, by token
+```
+
+`--operation` makes reuse mechanical: the first call under a label mints a
+token and every later call under it returns the same one, so a stateful server
+still sees one correlated operation. Labels are scoped to the session, so the
+same label in a new session gets a new token.
+
+`trail` is the audit path that needs no UUID in hand — one line per record,
+this session by default. The intent text, when recorded, stays in
+`~/.claude/intent-masking/ledger.jsonl` (dir `0700`, file `0600`) and never
+crosses the wire, so the token is opaque to the server by design. `make test`
+runs the skill's tests.
+
+The matching rule in `rules/coding.md` is what makes this fire before the call
+rather than after it, since rules load in every session.
+
 ## Status line
 
 ```
@@ -128,4 +160,5 @@ contain file contents and prompts from private work, and this repo is public.
 
 `CLAUDE.md`, `RTK.md` and `hooks/peon-ping/` are installed and rewritten by
 their own tools (rtk, peon-ping), so they are left to those installers.
-Skills are managed separately and resolved from `~/.agents` via `.skill-lock.json`.
+Third-party skills are managed separately and resolved from `~/.agents` via
+`.skill-lock.json`; only skills written here live in `skills/`.

@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: install lint diff
+.PHONY: install lint test diff
 
 CLAUDE_DIR ?= $(if $(CLAUDE_CONFIG_DIR),$(CLAUDE_CONFIG_DIR),$(HOME)/.claude)
 
@@ -8,6 +8,11 @@ install:
 
 lint:
 	shellcheck install.sh statusline.sh hooks/*.sh
+	uvx ruff check skills
+	uvx ruff format --check skills
+
+test:
+	python3 -m unittest discover -s skills/intent-masking
 
 # show drift between the live settings.json and repo + machine overlay
 diff:

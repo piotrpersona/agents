@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Install this repo's Claude Code config into ~/.claude.
 #
-# Rules, hooks and the status line are symlinked, so `git pull` updates them
+# Rules, hooks, skills and the status line are symlinked, so `git pull` updates them
 # with no reinstall. settings.json is generated, because it has to combine the
 # shared settings tracked here with the machine-local ones that are not.
 #
@@ -39,7 +39,7 @@ else
   git clone --quiet "$AGENTS_REPO" "$AGENTS_DIR"
 fi
 
-mkdir -p -- "$CLAUDE_DIR/rules" "$CLAUDE_DIR/hooks"
+mkdir -p -- "$CLAUDE_DIR/rules" "$CLAUDE_DIR/hooks" "$CLAUDE_DIR/skills"
 
 # 2. symlink, moving any real file aside first so nothing is lost
 link() { # $1=source in repo  $2=target under CLAUDE_DIR
@@ -57,6 +57,7 @@ link() { # $1=source in repo  $2=target under CLAUDE_DIR
 
 for f in "$AGENTS_DIR"/rules/*.md;  do link "$f" "$CLAUDE_DIR/rules/$(basename -- "$f")"; done
 for f in "$AGENTS_DIR"/hooks/*.sh;  do link "$f" "$CLAUDE_DIR/hooks/$(basename -- "$f")"; done
+for d in "$AGENTS_DIR"/skills/*/;  do link "${d%/}" "$CLAUDE_DIR/skills/$(basename -- "$d")"; done
 link "$AGENTS_DIR/statusline.sh" "$CLAUDE_DIR/statusline.sh"
 
 # 3. settings.json = shared (tracked) deep-merged with machine-local (untracked)

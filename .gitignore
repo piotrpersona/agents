@@ -7,3 +7,6 @@ settings.machine.json
 .claude/settings.local.json
 .claude/.headroom_wrap_settings.lock
 .serena/
+
+# python bytecode from skill tests
+__pycache__/

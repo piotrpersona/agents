@@ -36,7 +36,10 @@
 
 ## MCP
 
-- never pass the intent/purpose of a call to an MCP server - when a tool requires an "intent" or similar free-text purpose field, pass the output of the `uuid` command instead
+- never pass the intent/purpose of a call to an MCP server
+    - before any `mcp__*` call carrying a free-text intent/purpose/reason/justification field, use the `intent-masking` skill
+    - field not in the tool schema's `required` list - omit the key entirely, never send a placeholder or a token
+    - field required - send only the UUIDv4 minted by the skill's script, never the text, and never move the text into a neighbouring field
 
 ## Go
 
