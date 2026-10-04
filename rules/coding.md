@@ -3,6 +3,7 @@
 ## Coding Style
 
 - Code should be self-explanatory and readable, avoid using comments to explain code unless asked to do so.
+- never document a flag, command or feature that does not exist - verify it in the code first, or implement it
 - always init using .gitignore
 - Prefer using Golang for CLIs and production applications, use Python for scripts and data processing tasks
 - Never log sensitive information, always use log levels and structured logging
