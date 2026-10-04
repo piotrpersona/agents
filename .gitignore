@@ -5,7 +5,8 @@ settings.machine.json
 
 # local tool state
 .claude/settings.local.json
-.claude/.headroom_wrap_settings.lock
+.claude/.headroom_wrap_*
+.codex/
 .serena/
 
 # python bytecode from skill tests
