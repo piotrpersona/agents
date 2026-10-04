@@ -11,3 +11,6 @@ settings.machine.json
 
 # python bytecode from skill tests
 __pycache__/
+
+# generated copy of CLAUDE.md for Codex; CLAUDE.md is the source
+AGENTS.md
