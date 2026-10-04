@@ -50,7 +50,9 @@ rules/                        auto-loaded by Claude Code in every project
 hooks/
   codegraph-init-check.sh     SessionStart: flag repos with no CodeGraph index
 skills/
+  gitclone/                   clone a repo into its workspace path
   intent-masking/             UUID tokens instead of intent text in MCP calls
+  mkgit/                      start a new local or private repo
 statusline.sh                 vendored, see .upstream (MIT)
 settings.shared.json          portable settings, tracked here
 settings.machine.example.json template for the machine-local overlay
@@ -120,6 +122,22 @@ runs the skill's tests.
 
 The matching rule in `rules/coding.md` is what makes this fire before the call
 rather than after it, since rules load in every session.
+
+`gitclone` and `mkgit` keep clones and new repos on the layout in
+`rules/workspace.md`, so neither path has to be remembered:
+
+```sh
+~/.claude/skills/gitclone/clone.sh <owner/repo|url> [--dev|--work]
+~/.claude/skills/mkgit/mkgit.sh <name> [--remote]
+```
+
+`gitclone` reads the repo's visibility with `gh` and clones a public repo to
+`~/developer/github.com/<org>/<repo>`, a private one to `~/work/<org>/<repo>`;
+another host needs `--dev` or `--work`. `mkgit` inits
+`~/developer/projects/<name>` with a `.gitignore`, a `README.md` and one signed
+commit, and with `--remote` moves it to `~/developer/github.com/<you>/<name>`
+and pushes it to a new private github repo. Both take `--dry-run` and refuse to
+write over an existing directory.
 
 ## Status line
 

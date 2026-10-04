@@ -7,7 +7,7 @@ install:
 	./install.sh
 
 lint:
-	shellcheck install.sh statusline.sh hooks/*.sh
+	shellcheck install.sh statusline.sh hooks/*.sh skills/*/*.sh
 	uvx ruff check skills
 	uvx ruff format --check skills
 
