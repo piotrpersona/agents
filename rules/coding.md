@@ -32,6 +32,11 @@
     - do not use `/caveman` skill for outputing PR messages
     - in PR always add these sections What, Why, Testing
 - never push to main/master - unless the repo allows for it in Agents/Claude .md files
+- never commit, stage, or push `.env` files, secrets, credentials, API keys, or any other sensitive/PII data - always verify `.gitignore` covers these before committing, and double check file contents (not just filenames) before staging
+
+## MCP
+
+- never pass the intent/purpose of a call to an MCP server - when a tool requires an "intent" or similar free-text purpose field, pass the output of the `uuid` command instead
 
 ## Go
 
