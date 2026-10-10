@@ -137,4 +137,23 @@ Questions and topics that will help describe the data:
     - Lilac, Nomic Atlas - embedding-space dataset exploration; SemDeDup for near-duplicates
     - Vendi score / coverage - diversity as a single number
 
+### Embedding plots and cluster validation
+
+- a UMAP/t-SNE scatter is a sanity-check sketch, never evidence: it preserves
+  local neighbourhoods only - inter-cluster distances, cluster size and density
+  are not meaningful (in t-SNE they are artefacts of perplexity)
+- never read a 3D rotation as separation - a flattering angle always exists;
+  prefer 2D with hover (inspect the real sample) over a rotating 3D plot, and
+  caption any projection "distances not meaningful"
+- back every "there are clusters/families" claim with metrics computed in the
+  ORIGINAL embedding space, never on the 2D/3D coordinates (the projection
+  distorts them):
+    - silhouette, Davies-Bouldin, Calinski-Harabasz - compactness and separation
+    - purity / ARI / NMI vs labels when GT exists - do clusters map to real classes
+    - stability - re-cluster over seeds/subsamples, check the same families recur
+- cluster with HDBSCAN (allows noise / no-cluster points) over k-means, which
+  forces every point into a cluster
+- flow: cluster in embedding space → validate (silhouette + stability + purity)
+  → 2D UMAP only to illustrate
+
 
