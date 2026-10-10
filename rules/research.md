@@ -120,4 +120,21 @@ Questions and topics that will help describe the data:
 - always present breakdown of the dataset by date and other stratification properties and by split
 - when visualizing datasets use a simple plotly python script, export to html and automatically open in browser
 
+### Credibility and data-quality tooling
+
+- separate the two questions before sampling: an unbiased *measurement* needs a
+  representative sample (stratified by real production frequency); *finding holes*
+  needs a diverse/adversarial sample - never mix them in one set
+- measuring effectiveness needs ground truth: a trusted reference + an explicit
+  "what counts as correct" rule + who adjudicates (inter-annotator agreement) -
+  a cluster id is structure, never a label of truth
+- when the data has a time axis, split by time (past → future), not randomly
+- tools automate detection, never the construct definition or the
+  representative-vs-diverse choice - those stay with the researcher:
+    - cleanlab - label noise / mislabeled samples
+    - deepchecks, evidently - data integrity, distribution drift, train/test leakage
+    - pandera, Great Expectations - schema and distribution checks
+    - Lilac, Nomic Atlas - embedding-space dataset exploration; SemDeDup for near-duplicates
+    - Vendi score / coverage - diversity as a single number
+
 
