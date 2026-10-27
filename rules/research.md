@@ -69,6 +69,28 @@ In research mode use `/caveman` only to report task status, never to explain con
 - read `MLFLOW_TRACKING_URI` from `.env`, never hardcode it
 - keep canary runs tagged so they stay out of comparisons
 
+## Significance and margin of error
+
+> before calling anything a trend, verify it is larger than the noise
+
+- never read a difference between two single runs as a trend - a 0.004 AUROC
+  gap between 2 configs is almost certainly seed/split noise, not an effect
+- do not draw a line (or a conclusion) through two points - a real trend needs
+  enough points to see the shape, and the shape can be non-monotonic (a flat
+  region then a cliff looks like a slope if you only sample the ends)
+- quantify the noise before comparing: report mean ± std over multiple seeds
+  and/or stratified k-fold, and state the run-to-run variance so the reader can
+  judge whether a gap clears it
+- a gap within one std of the noise is "no measured difference", say exactly
+  that - do not narrate it as better/worse
+- small test sets make this worse: a metric on a few hundred samples (or a
+  precision resting on a handful of positive calls) is high-variance - flag it
+- confounds inflate apparent variance: label noise, early-stopping on a tiny
+  val set (the stopping epoch itself becomes random), and class imbalance all
+  widen the spread - control or report them before claiming an effect
+- when a past conclusion came from too few points, say so plainly and re-run
+  with enough points + seeds rather than defend it
+
 ## GPU
 
 - always report the device in use plus GPU model, count, total and free memory at job start
