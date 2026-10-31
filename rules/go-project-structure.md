@@ -20,13 +20,14 @@ internal/
         outbound/
             postgres/ - database adapters, should contain only logic for adapting to the database, prefer using `sqlx` for database access
                 migrations/ - database migrations, should contain only sql files for migrations use https://github.com/golang-migrate/migrate
-                transaction_repository.go - repository for transactions
+                db.go - shared connection and transactor only; do not put feature queries here, each feature owns its own repository
             paypal/ - service adapters, should contain only logic for adapting to external services
                 transaction_service.go - service for transactions
                 other_service.go (freeform)
     features/ - business logic for the application
         <feature_name>/ - each feature should have its own folder, usually this will be a command like `create_transaction` or `upload_transaction`
             entrypoint.go - entrypoint for the feature, should contain the main logic for the feature
+            repository.go - feature-specific database repository; each feature owns its queries and must not share a repository across features, since each query could require different data
     models/ - models should be flat and not contain any logic (unless specified); models should be used for data transfer between layers
         transaction.go
         transaction_audit.go
@@ -35,8 +36,8 @@ internal/
         tracing.go - tracing for the application
         logging.go - logging for the application
     ports/ - interfaces for the application, should contain only interfaces and no logic
-        transaction_repository.go - db are _repository.go
         transaction_service.go - service are _service.go - for external calling
         other_port.go (freeform)
+        note: db repositories are not shared ports; each feature declares its own repository interface next to its entrypoint.go
 Dockerfile - for building the application if necessary, always multistage build
 ```
